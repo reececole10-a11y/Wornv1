@@ -1,0 +1,13 @@
+{
+  "name": "cubeland",
+  "version": "1.0.0",
+  "description": "A block-building sandbox game for phone browsers. No engine, no dependencies.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "npx --yes http-server -p 8000 -c-1 .",
+    "serve": "python3 -m http.server 8000"
+  },
+  "keywords": ["game", "voxel", "webgl", "mobile", "pwa", "sandbox"],
+  "license": "MIT"
+}
