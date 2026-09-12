@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<meta name="theme-color" content="#7ec0ee" />
+<meta name="description" content="Cubeland - a block-building sandbox you can play in a phone browser. Mine, build, explore an endless procedural world." />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Cubeland" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="icon" href="icon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="icon-192.png" />
+<link rel="stylesheet" href="styles.css" />
+<title>Cubeland</title>
+</head>
+<body>
+<canvas id="gl"></canvas>
+
+<!-- Head-up display. Nothing here takes touches unless it says so. -->
+<div id="hud">
+  <div id="tint-water"></div>
+  <div id="tint-hurt"></div>
+  <div id="crosshair"></div>
+
+  <div id="vitals">
+    <div id="hearts" class="meter"></div>
+    <div id="bubbles" class="meter"></div>
+  </div>
+
+  <div id="debug" hidden></div>
+
+  <button id="btn-menu" class="tap icon-btn" aria-label="Menu">&#9776;</button>
+
+  <div id="stick" hidden><div id="stick-knob"></div></div>
+
+  <div id="right-pad">
+    <button id="btn-place" class="tap round" aria-label="Place block">PLACE</button>
+    <button id="btn-mine" class="tap round" aria-label="Mine block">MINE</button>
+    <button id="btn-jump" class="tap round big" aria-label="Jump">JUMP</button>
+    <div id="fly-pad" hidden>
+      <button id="btn-up" class="tap round small" aria-label="Fly up">&#9650;</button>
+      <button id="btn-down" class="tap round small" aria-label="Fly down">&#9660;</button>
+    </div>
+  </div>
+
+  <div id="hotbar" class="tap"></div>
+  <div id="toast"></div>
+</div>
+
+<!-- Panels -->
+<div id="inventory" class="panel" hidden>
+  <div class="panel-inner">
+    <h2>Blocks</h2>
+    <p class="hint">Tap a block to put it in the selected slot.</p>
+    <div id="inv-grid" class="grid"></div>
+    <h2>Crafting</h2>
+    <div id="craft-list"></div>
+    <button class="wide" data-close>Close</button>
+  </div>
+</div>
+
+<div id="menu" class="panel" hidden>
+  <div class="panel-inner">
+    <h2>Cubeland</h2>
+    <label class="row">Render distance <span id="rd-val"></span>
+      <input id="rd" type="range" min="2" max="10" step="1" />
+    </label>
+    <label class="row">Look sensitivity <span id="sens-val"></span>
+      <input id="sens" type="range" min="0.3" max="3" step="0.1" />
+    </label>
+    <label class="row">Field of view <span id="fov-val"></span>
+      <input id="fov" type="range" min="55" max="100" step="1" />
+    </label>
+    <label class="row">Resolution <span id="res-val"></span>
+      <input id="res" type="range" min="0.5" max="1.5" step="0.05" />
+    </label>
+    <label class="row switch">Creative mode<input id="creative" type="checkbox" /></label>
+    <label class="row switch">Take damage<input id="damage" type="checkbox" /></label>
+    <label class="row switch">Auto step up<input id="autojump" type="checkbox" /></label>
+    <label class="row switch">Miner's light<input id="headlamp" type="checkbox" /></label>
+    <label class="row switch">Sound<input id="sound" type="checkbox" /></label>
+    <label class="row switch">Show debug info<input id="showdebug" type="checkbox" /></label>
+    <div class="row buttons">
+      <button id="btn-fly">Toggle flight</button>
+      <button id="btn-daynight">Skip to day</button>
+    </div>
+    <div class="row buttons">
+      <button id="btn-save">Save now</button>
+      <button id="btn-new" class="danger">New world</button>
+    </div>
+    <p class="hint" id="seed-line"></p>
+    <button class="wide" data-close>Back to game</button>
+  </div>
+</div>
+
+<div id="death" class="panel" hidden>
+  <div class="panel-inner center">
+    <h2>You died</h2>
+    <p class="hint" id="death-note"></p>
+    <button class="wide" id="btn-respawn">Respawn</button>
+  </div>
+</div>
+
+<div id="boot">
+  <div class="boot-inner">
+    <h1>CUBELAND</h1>
+    <p id="boot-note">Building the world&hellip;</p>
+    <button id="btn-play" hidden>Play</button>
+    <ul id="boot-help">
+      <li><b>Left thumb</b> walks. <b>Right thumb</b> looks around.</li>
+      <li><b>Tap</b> the right side to place a block, <b>hold</b> to mine.</li>
+      <li>Double-tap <b>JUMP</b> to fly. Tap the hotbar to change block.</li>
+      <li>On a computer: WASD, mouse, left click mines, right click places.</li>
+    </ul>
+  </div>
+</div>
+
+<script type="module" src="src/main.js"></script>
+</body>
+</html>
