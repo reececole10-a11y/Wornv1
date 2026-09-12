@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<meta name="theme-color" content="#080b14" />
+<meta name="description" content="Swarm - a one-thumb survival arena. Move, survive, and pick what gets stronger." />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Swarm" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="icon" href="icon.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="styles.css" />
+<title>Swarm</title>
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<div id="hud">
+  <div id="top">
+    <div id="clock">0:00</div>
+    <div id="level-row">
+      <span id="level">Lv 1</span>
+      <div class="bar xp"><i id="xp-fill"></i></div>
+      <span id="kills">0 kills</span>
+    </div>
+  </div>
+
+  <div id="bottom">
+    <div class="bar hp"><i id="hp-fill"></i><span id="hp-text">100</span></div>
+    <div id="loadout"></div>
+  </div>
+
+  <button id="btn-pause" class="icon" aria-label="Pause">&#10073;&#10073;</button>
+  <div id="banner"></div>
+  <div id="stick" hidden><div id="knob"></div></div>
+</div>
+
+<div id="levelup" class="panel" hidden>
+  <div class="sheet">
+    <h2>Level up</h2>
+    <div id="cards"></div>
+  </div>
+</div>
+
+<div id="pause" class="panel" hidden>
+  <div class="sheet center">
+    <h2>Paused</h2>
+    <label class="row">Sound<input id="sound" type="checkbox" checked /></label>
+    <button class="wide" id="btn-resume">Resume</button>
+    <button class="wide ghost" id="btn-quit">Give up</button>
+  </div>
+</div>
+
+<div id="over" class="panel" hidden>
+  <div class="sheet center">
+    <h2 id="over-title">Overwhelmed</h2>
+    <div id="over-stats"></div>
+    <p class="best" id="best"></p>
+    <button class="wide" id="btn-again">Again</button>
+    <a class="link" href="../">Back to the arcade</a>
+  </div>
+</div>
+
+<div id="title">
+  <div class="title-inner">
+    <h1>SWARM</h1>
+    <p>Hold anywhere to move. Your weapons fire themselves.<br />Live as long as you can.</p>
+    <button id="btn-play">Start</button>
+    <p class="best" id="title-best"></p>
+    <a class="link" href="../">Back to the arcade</a>
+  </div>
+</div>
+
+<script type="module" src="src/main.js"></script>
+</body>
+</html>

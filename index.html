@@ -2,121 +2,73 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-<meta name="theme-color" content="#7ec0ee" />
-<meta name="description" content="Cubeland - a block-building sandbox you can play in a phone browser. Mine, build, explore an endless procedural world." />
-<meta name="mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="Cubeland" />
-<link rel="manifest" href="manifest.webmanifest" />
-<link rel="icon" href="icon.svg" type="image/svg+xml" />
-<link rel="apple-touch-icon" href="icon-192.png" />
-<link rel="stylesheet" href="styles.css" />
-<title>Cubeland</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0d1220" />
+<meta name="description" content="Two small games built for phone browsers: a block-building sandbox and a one-thumb survival arena." />
+<link rel="icon" href="cubeland/icon.svg" type="image/svg+xml" />
+<title>Arcade</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html { min-height: 100%; background: #0b0f1a; }
+  body {
+    margin: 0; min-height: 100vh;
+    background: radial-gradient(120% 80% at 50% 0%, #1a2338 0%, #0b0f1a 65%);
+    color: #eaf2ff;
+    font: 500 15px/1.6 ui-rounded, "Avenir Next", Verdana, system-ui, sans-serif;
+    padding: calc(28px + env(safe-area-inset-top)) 20px calc(40px + env(safe-area-inset-bottom));
+  }
+  header { max-width: 620px; margin: 0 auto 26px; }
+  h1 { margin: 0 0 6px; font-size: clamp(30px, 9vw, 44px); letter-spacing: 0.14em; font-weight: 700; }
+  header p { margin: 0; color: #8aa0bd; font-size: 13px; }
+  main { max-width: 620px; margin: 0 auto; display: grid; gap: 16px; }
+  a.game {
+    display: flex; gap: 16px; align-items: center;
+    padding: 16px; border-radius: 20px; text-decoration: none; color: inherit;
+    background: rgba(255,255,255,0.045);
+    border: 1px solid rgba(140,180,240,0.2);
+  }
+  a.game:active { background: rgba(255,255,255,0.1); transform: scale(0.99); }
+  a.game img { width: 76px; height: 76px; border-radius: 18px; flex: none; }
+  .name { font-size: 19px; font-weight: 700; letter-spacing: 0.05em; }
+  .blurb { color: #8aa0bd; font-size: 13px; margin-top: 3px; }
+  .tags { margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag {
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 99px;
+    background: rgba(120,180,255,0.12); color: #a8c4e8;
+  }
+  footer { max-width: 620px; margin: 28px auto 0; color: #6d81a0; font-size: 12px; }
+  footer code { background: rgba(255,255,255,0.07); padding: 2px 6px; border-radius: 6px; }
+</style>
 </head>
 <body>
-<canvas id="gl"></canvas>
+<header>
+  <h1>ARCADE</h1>
+  <p>Two games, both built to be played with your thumbs. No install, no account.</p>
+</header>
 
-<!-- Head-up display. Nothing here takes touches unless it says so. -->
-<div id="hud">
-  <div id="tint-water"></div>
-  <div id="tint-hurt"></div>
-  <div id="crosshair"></div>
-
-  <div id="vitals">
-    <div id="hearts" class="meter"></div>
-    <div id="bubbles" class="meter"></div>
-  </div>
-
-  <div id="debug" hidden></div>
-
-  <button id="btn-menu" class="tap icon-btn" aria-label="Menu">&#9776;</button>
-
-  <div id="stick" hidden><div id="stick-knob"></div></div>
-
-  <div id="right-pad">
-    <button id="btn-place" class="tap round" aria-label="Place block">PLACE</button>
-    <button id="btn-mine" class="tap round" aria-label="Mine block">MINE</button>
-    <button id="btn-jump" class="tap round big" aria-label="Jump">JUMP</button>
-    <div id="fly-pad" hidden>
-      <button id="btn-up" class="tap round small" aria-label="Fly up">&#9650;</button>
-      <button id="btn-down" class="tap round small" aria-label="Fly down">&#9660;</button>
+<main>
+  <a class="game" href="cubeland/">
+    <img src="cubeland/icon.svg" alt="" />
+    <div>
+      <div class="name">Cubeland</div>
+      <div class="blurb">Mine, build and wander an endless block world. Caves, oceans, day and night.</div>
+      <div class="tags"><span class="tag">Sandbox</span><span class="tag">Survival</span><span class="tag">Endless world</span></div>
     </div>
-  </div>
+  </a>
 
-  <div id="hotbar" class="tap"></div>
-  <div id="toast"></div>
-</div>
-
-<!-- Panels -->
-<div id="inventory" class="panel" hidden>
-  <div class="panel-inner">
-    <h2>Blocks</h2>
-    <p class="hint">Tap a block to put it in the selected slot.</p>
-    <div id="inv-grid" class="grid"></div>
-    <h2>Crafting</h2>
-    <div id="craft-list"></div>
-    <button class="wide" data-close>Close</button>
-  </div>
-</div>
-
-<div id="menu" class="panel" hidden>
-  <div class="panel-inner">
-    <h2>Cubeland</h2>
-    <label class="row">Render distance <span id="rd-val"></span>
-      <input id="rd" type="range" min="2" max="10" step="1" />
-    </label>
-    <label class="row">Look sensitivity <span id="sens-val"></span>
-      <input id="sens" type="range" min="0.3" max="3" step="0.1" />
-    </label>
-    <label class="row">Field of view <span id="fov-val"></span>
-      <input id="fov" type="range" min="55" max="100" step="1" />
-    </label>
-    <label class="row">Resolution <span id="res-val"></span>
-      <input id="res" type="range" min="0.5" max="1.5" step="0.05" />
-    </label>
-    <label class="row switch">Creative mode<input id="creative" type="checkbox" /></label>
-    <label class="row switch">Take damage<input id="damage" type="checkbox" /></label>
-    <label class="row switch">Auto step up<input id="autojump" type="checkbox" /></label>
-    <label class="row switch">Miner's light<input id="headlamp" type="checkbox" /></label>
-    <label class="row switch">Sound<input id="sound" type="checkbox" /></label>
-    <label class="row switch">Show debug info<input id="showdebug" type="checkbox" /></label>
-    <div class="row buttons">
-      <button id="btn-fly">Toggle flight</button>
-      <button id="btn-daynight">Skip to day</button>
+  <a class="game" href="swarm/">
+    <img src="swarm/icon.svg" alt="" />
+    <div>
+      <div class="name">Swarm</div>
+      <div class="blurb">One thumb, no aiming. Outrun the horde and pick what gets stronger each level.</div>
+      <div class="tags"><span class="tag">Arcade</span><span class="tag">Roguelite</span><span class="tag">One hand</span></div>
     </div>
-    <div class="row buttons">
-      <button id="btn-save">Save now</button>
-      <button id="btn-new" class="danger">New world</button>
-    </div>
-    <p class="hint" id="seed-line"></p>
-    <button class="wide" data-close>Back to game</button>
-  </div>
-</div>
+  </a>
+</main>
 
-<div id="death" class="panel" hidden>
-  <div class="panel-inner center">
-    <h2>You died</h2>
-    <p class="hint" id="death-note"></p>
-    <button class="wide" id="btn-respawn">Respawn</button>
-  </div>
-</div>
-
-<div id="boot">
-  <div class="boot-inner">
-    <h1>CUBELAND</h1>
-    <p id="boot-note">Building the world&hellip;</p>
-    <button id="btn-play" hidden>Play</button>
-    <ul id="boot-help">
-      <li><b>Left thumb</b> walks. <b>Right thumb</b> looks around.</li>
-      <li><b>Tap</b> the right side to place a block, <b>hold</b> to mine.</li>
-      <li>Double-tap <b>JUMP</b> to fly. Tap the hotbar to change block.</li>
-      <li>On a computer: WASD, mouse, left click mines, right click places.</li>
-    </ul>
-  </div>
-</div>
-
-<script type="module" src="src/main.js"></script>
+<footer>
+  Both games are static pages — serve this folder with <code>npm start</code> and open it on your phone.
+</footer>
 </body>
 </html>
